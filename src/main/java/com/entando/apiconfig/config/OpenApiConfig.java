@@ -1,4 +1,4 @@
-package com.entando.apiproxy.config;
+package com.entando.apiconfig.config;
 
 import io.swagger.v3.oas.models.Components;
 import io.swagger.v3.oas.models.OpenAPI;

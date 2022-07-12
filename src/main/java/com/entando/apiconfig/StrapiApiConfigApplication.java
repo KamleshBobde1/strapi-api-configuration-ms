@@ -1,4 +1,4 @@
-package com.entando.apiproxy;
+package com.entando.apiconfig;
 
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
@@ -7,8 +7,8 @@ import lombok.extern.slf4j.Slf4j;
 
 @SpringBootApplication
 @Slf4j
-public class EntandoApiProxyApplication {
+public class StrapiApiConfigApplication {
 	public static void main(String[] args) {
-		SpringApplication.run(EntandoApiProxyApplication.class, args);
+		SpringApplication.run(StrapiApiConfigApplication.class, args);
 	}
 }

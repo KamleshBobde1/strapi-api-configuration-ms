@@ -1,13 +1,10 @@
-package com.entando.apiproxy.rest;
+package com.entando.apiconfig.rest;
 
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
-import java.util.stream.Collectors;
 
 import javax.validation.Valid;
 
-import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -22,16 +19,14 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.entando.apiproxy.config.ApplicationConstants;
-import com.entando.apiproxy.exception.ApiConfigNotFoundException;
-import com.entando.apiproxy.persistence.entity.ApiConfig;
-import com.entando.apiproxy.request.ApiConfigRequestView;
-import com.entando.apiproxy.response.ApiConfigResponseView;
-import com.entando.apiproxy.service.ApiConfigService;
-import com.entando.apiproxy.util.PagedContent;
+import com.entando.apiconfig.config.ApplicationConstants;
+import com.entando.apiconfig.exception.ApiConfigNotFoundException;
+import com.entando.apiconfig.persistence.entity.ApiConfig;
+import com.entando.apiconfig.request.ApiConfigRequestView;
+import com.entando.apiconfig.response.ApiConfigResponseView;
+import com.entando.apiconfig.service.ApiConfigService;
 
 import io.swagger.v3.oas.annotations.Operation;
 
@@ -73,7 +68,7 @@ public class ApiConfigController {
 		try {
 			Optional<ApiConfig> apiConfigOptional = apiConfigService.getApiConfiguration(apiConfigId);
 			if (!apiConfigOptional.isPresent()) {
-				logger.warn("Api Configuration '{}' does not exists", apiConfigId);
+				logger.warn("Api Configuration '{}' does not exist", apiConfigId);
 				throw new ApiConfigNotFoundException(String.format(ApplicationConstants.API_CONFIG_NOT_FOUND_ERR_MSG, "id", apiConfigId));
 			} else {
 				ApiConfig updatedEntity = apiConfigService.updateApiConfiguration(apiConfigOptional.get(), reqView);
@@ -88,7 +83,7 @@ public class ApiConfigController {
 		}
 	}
 	
-	@Operation(summary = "Get all the api configurations", description = "Public api, no authentication required.")
+	@Operation(summary = "Get the api configuration", description = "Public api, no authentication required.")
 	@GetMapping("/")
 	@CrossOrigin
 //	@RolesAllowed({ ApplicationConstants.ADMIN })
@@ -98,24 +93,9 @@ public class ApiConfigController {
 		if(!CollectionUtils.isEmpty(configs)) {
 			return new ResponseEntity<>(new ApiConfigResponseView(configs.get(0)), HttpStatus.OK);
 		} else {
-			logger.warn("Api Configuration '{}' does not exists");
+			logger.warn("Api Configuration '{}' does not exist");
 			throw new ApiConfigNotFoundException(ApplicationConstants.API_CONFIG_NOT_AVAILABLE);
 		}
-	}
-	
-	@Operation(summary = "Get all the Api Configurations paginated", description = "Public api, no authentication required.")
-	@GetMapping("/paged")
-	@CrossOrigin
-//	@RolesAllowed({ ApplicationConstants.ADMIN })
-	public PagedContent<ApiConfigResponseView, ApiConfig> getFilteredApiConfigurations(
-			@RequestParam Integer page, @RequestParam Integer pageSize, @RequestParam(required = false) String contextPath) {
-		logger.debug("REST request to get paginated Api Configurations");
-		Integer sanitizedPageNum = page >= 1 ? page - 1 : 0;
-		String sanitizedCollectionType = StringUtils.isEmpty(contextPath) ? ApplicationConstants.API_CONFIG_SEARCH_PARAM_ALL : contextPath.trim();
-
-		PagedContent<ApiConfigResponseView, ApiConfig> pagedContent = apiConfigService
-				.getFilteredApiConfigurations(sanitizedPageNum, pageSize, sanitizedCollectionType);
-		return pagedContent;
 	}
 	
 	@Operation(summary = "Get the Api Configuration details by id", description = "Public api, no authentication required.")
@@ -128,23 +108,8 @@ public class ApiConfigController {
 		if (apiConfigOptional.isPresent()) {
 			return new ResponseEntity<>(apiConfigOptional.map(ApiConfigResponseView::new).get(), HttpStatus.OK);
 		} else {
-			logger.warn("Requested Api Configuration '{}' does not exists", apiConfigId);
+			logger.warn("Requested Api Configuration '{}' does not exist", apiConfigId);
 			throw new ApiConfigNotFoundException(String.format(ApplicationConstants.API_CONFIG_NOT_FOUND_ERR_MSG, "id", apiConfigId));
-		}
-	}
-	
-	@Operation(summary = "Get the Api Configuration details by context path", description = "Public api, no authentication required.")
-	@GetMapping("/context/{contextPath}")
-	@CrossOrigin
-//	@RolesAllowed({ ApplicationConstants.ADMIN })
-	public ResponseEntity<ApiConfigResponseView> getApiConfigByContextPath(@PathVariable String contextPath) {
-		logger.debug("REST request to get Api Configuration by context path: {}", contextPath);
-		Optional<ApiConfig> apiConfigOptional = apiConfigService.getApiConfigurationByContextPath(contextPath);
-		if (apiConfigOptional.isPresent()) {
-			return new ResponseEntity<>(apiConfigOptional.map(ApiConfigResponseView::new).get(), HttpStatus.OK);
-		} else {
-			logger.warn("Requested Api Configuration '{}' does not exists", contextPath);
-			throw new ApiConfigNotFoundException(String.format(ApplicationConstants.API_CONFIG_NOT_FOUND_ERR_MSG, "context path", contextPath));
 		}
 	}
 	
@@ -157,7 +122,7 @@ public class ApiConfigController {
 		try {
 			Optional<ApiConfig> apiConfigOptional = apiConfigService.getApiConfiguration(apiConfigId);
 			if (!apiConfigOptional.isPresent()) {
-				logger.warn("Requested Api Configuration '{}' does not exists", apiConfigId);
+				logger.warn("Requested Api Configuration '{}' does not exist", apiConfigId);
 				throw new ApiConfigNotFoundException(String.format(ApplicationConstants.API_CONFIG_NOT_FOUND_ERR_MSG, "id", apiConfigId));
 			}
 			apiConfigService.deleteApiConfiguration(apiConfigId);
@@ -168,15 +133,4 @@ public class ApiConfigController {
 			throw new RuntimeException(e.getMessage());
 		}
 	}
-
-//	@Operation(summary = "Get all the api configurations", description = "Private api, authentication required.")
-//	@GetMapping("/")
-//	@CrossOrigin
-//	@RolesAllowed({ ApplicationConstants.ADMIN })
-//	public List<ApiConfigResponseView> getAllApiConfigurations() {
-//		logger.debug("REST request to get all Api Configurations");
-//		return apiConfigService.getAllApiConfigurations().stream().map(ApiConfigResponseView::new)
-//				.collect(Collectors.toList());
-//	}
-	
 }

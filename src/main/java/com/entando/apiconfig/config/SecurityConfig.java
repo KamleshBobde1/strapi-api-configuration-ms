@@ -1,4 +1,4 @@
-package com.entando.apiproxy.config;
+package com.entando.apiconfig.config;
 
 import org.keycloak.adapters.springboot.KeycloakSpringBootConfigResolver;
 import org.keycloak.adapters.springsecurity.KeycloakSecurityComponents;

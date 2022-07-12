@@ -1,4 +1,4 @@
-package com.entando.apiproxy.rest;
+package com.entando.apiconfig.rest;
 
 import java.util.Arrays;
 import java.util.Optional;
@@ -16,31 +16,35 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.client.RestTemplate;
 
-import com.entando.apiproxy.config.ApplicationConstants;
-import com.entando.apiproxy.exception.ApiConfigNotFoundException;
-import com.entando.apiproxy.persistence.entity.ApiConfig;
-import com.entando.apiproxy.request.ApiRequestView;
-import com.entando.apiproxy.service.ApiConfigService;
+import com.entando.apiconfig.config.ApplicationConstants;
+import com.entando.apiconfig.exception.ApiConfigNotFoundException;
+import com.entando.apiconfig.persistence.entity.ApiConfig;
+import com.entando.apiconfig.request.ApiProxyRequestView;
+import com.entando.apiconfig.service.ApiConfigService;
 
 import io.swagger.v3.oas.annotations.Operation;
 
+/**
+ * Currently not in use
+ */
 @RestController
 @RequestMapping("/api/proxy")
-public class StrapiApiController {
+public class ApiProxyController {
 	
 	@Autowired
 	private ApiConfigService apiConfigService;
 	
-	private final Logger logger = LoggerFactory.getLogger(StrapiApiController.class);
+	private final Logger logger = LoggerFactory.getLogger(ApiProxyController.class);
 	private RestTemplate restTemplate  = new RestTemplate();
 	
-	@Operation(summary = "Get data from strapi", description = "Private api, authentication required.")
+	@Operation(summary = "Get data from strapi", description = "Public api, no authentication required.")
 	@PostMapping("/")
 	@CrossOrigin
 	//@RolesAllowed({ ApplicationConstants.ADMIN })
-	public Object execute(@RequestBody ApiRequestView apiRequestView) {
+	public Object execute(@RequestBody ApiProxyRequestView apiRequestView) {
 		logger.info("REST request to call third party api, context: ", apiRequestView.getContextPath());
-		Optional<ApiConfig> apiConfigOptional = apiConfigService.getApiConfigurationByContextPath(apiRequestView.getContextPath());
+//		Optional<ApiConfig> apiConfigOptional = apiConfigService.getApiConfigurationByContextPath(apiRequestView.getContextPath());
+		Optional<ApiConfig> apiConfigOptional = apiConfigService.getApiConfiguration(1l);
 		String baseUrl = "";
 		if (apiConfigOptional.isPresent()) {
 			baseUrl = apiConfigOptional.get().getBaseUrl();

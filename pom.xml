@@ -9,9 +9,9 @@
         <relativePath/> <!-- lookup parent from repository -->
     </parent>
     <groupId>com.entando</groupId>
-    <artifactId>ent-api-proxy</artifactId>
+    <artifactId>strapi-api-config</artifactId>
     <version>0.0.1</version>
-    <description>API Configurations for ent compatible third party applications</description>
+    <description>Strapi application API Configurations for entando</description>
     <properties>
         <problem-spring-web.version>0.25.0</problem-spring-web.version>
         <java.version>11</java.version>
@@ -77,12 +77,6 @@
             <scope>test</scope>
         </dependency>
         <dependency>
-            <groupId>commons-beanutils</groupId>
-            <artifactId>commons-beanutils</artifactId>
-            <version>1.9.4</version>
-            <type>jar</type>
-        </dependency>
-        <dependency>
             <groupId>org.postgresql</groupId>
             <artifactId>postgresql</artifactId>
         </dependency>
@@ -109,9 +103,9 @@
                             <image>kamleshbobde/${project.artifactId}:${project.version}</image>
                         </to>
                         <container>
-                            <mainClass>com.entando.template.EntandoMSApplication</mainClass>
+                            <mainClass>com.entando.apiconfig.StrapiApiConfigApplication</mainClass>
                             <ports>
-                                <port>8081</port>
+                                <port>8082</port>
                             </ports>
                             <environment>
                                 <SPRING_OUTPUT_ANSI_ENABLED>ALWAYS</SPRING_OUTPUT_ANSI_ENABLED>

@@ -1,4 +1,4 @@
-package com.entando.apiproxy.persistence.entity;
+package com.entando.apiconfig.persistence.entity;
 
 import java.time.LocalDateTime;
 import java.util.Objects;
@@ -22,13 +22,11 @@ public class ApiConfig {
 	@GeneratedValue(strategy = GenerationType.AUTO)
 	private Long id;
 
-//	private String applicationName;
+	@Column(nullable = false, length = 100, unique = true)
+	private String applicationName;
 	
-	@Column(nullable = false, length = 600, unique = true)
+	@Column(nullable = false, length = 100, unique = true)
 	private String baseUrl;
-	
-	@Column(nullable = false, length = 600, unique = true)
-	private String contextPath;
 	
 	@CreationTimestamp
 	private LocalDateTime createdAt;
@@ -49,19 +47,19 @@ public class ApiConfig {
 		if (getClass() != obj.getClass())
 			return false;
 		ApiConfig other = (ApiConfig) obj;
-		return Objects.equals(baseUrl, other.baseUrl) && Objects.equals(contextPath, other.contextPath)
+		return Objects.equals(applicationName, other.applicationName) && Objects.equals(baseUrl, other.baseUrl)
 				&& Objects.equals(createdAt, other.createdAt) && Objects.equals(id, other.id)
 				&& Objects.equals(updatedAt, other.updatedAt);
 	}
 
 	@Override
 	public int hashCode() {
-		return Objects.hash(baseUrl, contextPath, createdAt, id, updatedAt);
+		return Objects.hash(applicationName, baseUrl, createdAt, id, updatedAt);
 	}
 
 	@Override
 	public String toString() {
-		return "ApiConfig [id=" + id + ", baseUrl=" + baseUrl + ", contextPath=" + contextPath + ", createdAt="
+		return "ApiConfig [id=" + id + ", applicationName=" + applicationName + ", baseUrl=" + baseUrl + ", createdAt="
 				+ createdAt + ", updatedAt=" + updatedAt + "]";
 	}
 

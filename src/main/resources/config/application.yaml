@@ -27,7 +27,7 @@ keycloak:
 
 app:
   version: 1
-  name: entando-template
+  name: strapi-api-config
   security:
     auth-server-url: ${keycloak.auth-server-url}
     realm: ${keycloak.realm}

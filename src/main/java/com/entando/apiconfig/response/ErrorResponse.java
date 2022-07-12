@@ -1,4 +1,4 @@
-package com.entando.apiproxy.response;
+package com.entando.apiconfig.response;
 
 import java.util.List;
 import lombok.Data;

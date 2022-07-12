@@ -1,4 +1,4 @@
-package com.entando.apiproxy.request;
+package com.entando.apiconfig.request;
 
 import javax.validation.constraints.NotEmpty;
 
@@ -7,7 +7,7 @@ import org.springframework.http.HttpMethod;
 import lombok.Data;
 
 @Data
-public class ApiRequestView {
+public class ApiProxyRequestView {
 	
 	@NotEmpty(message = "contextPath is mandatory field")
 	private String contextPath;
